@@ -148,6 +148,7 @@ function toISO(v) {
 }
 
 async function pull() {
+  cloud.reset(); // 同 things.pull：拉取是一次新的试探
   try {
     const res = await cloud.call('sync_pull', {});
     const remote = (res && res.categories) || [];

@@ -185,6 +185,33 @@ node tools/smoke-test.js
    - 剪切板（复制邀请码用到）
 7. **最低基础库**：后台「设置 → 基本设置」设为 **2.21.2**（`chooseAvatar` 的门槛）
 
+### 批量部署（可选，省去逐个右键）
+
+开发者工具「设置 → 安全设置 → 服务端口」打开后，可用官方 CLI 一次部署全部：
+
+```bash
+/Applications/wechatwebdevtools.app/Contents/MacOS/cli cloud functions deploy \
+  -e cloud1-d0gg6c2cv301bef68 \
+  -r \
+  --project /Users/Admin/myWorkSpace/ourStory \
+  --paths cloudfunctions/login cloudfunctions/user_update cloudfunctions/thing_upsert \
+          cloudfunctions/thing_delete cloudfunctions/category_upsert cloudfunctions/category_delete \
+          cloudfunctions/sync_pull
+```
+
+`-r`（`--remote-npm-install`）让云端装依赖，本机不需要 `node_modules`。
+
+### 报错对照
+
+| 控制台报错 | 含义 | 处理 |
+|---|---|---|
+| `-501000 FunctionName parameter could not be found` | 该环境里没有这个云函数 | 按上面第 5 步部署；部署后「我的 → 同步到云端」会重新探测，不用重启 |
+| `-501001` 或 `env not exists` | 环境 ID 不对／环境已删 | 核对 `miniprogram/config.js` 的 `ENV_ID` 与云开发控制台 |
+| 云函数返回 `{ ok: false, msg: 'collection not exists' }` | 集合没建 | 补建集合（第 2 步） |
+| 日志提示「已切到本地模式」 | 预期行为，不是崩溃 | 数据在本地完整保存，云端恢复后自动补传 |
+
+> `login` 在 `users` 集合缺失时仍会返回 openid（只带一个 `warn`），因为身份不依赖该集合；同步类函数则需要 `things` / `categories` 集合存在。
+
 ---
 
 ## 设计规范

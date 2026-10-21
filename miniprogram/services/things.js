@@ -219,6 +219,7 @@ function fromRemote(r) {
  * 云端不可用时静默返回，本地数据不动。
  */
 async function pull() {
+  cloud.reset(); // 手动/回到前台触发的拉取，要真的重试一次，不能沿用上次的短路
   try {
     const res = await cloud.call('sync_pull', {});
     const remote = (res && res.things) || [];

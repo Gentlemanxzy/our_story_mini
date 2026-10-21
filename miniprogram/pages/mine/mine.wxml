@@ -60,5 +60,6 @@
 
   <view class="foot">
     <text class="t-hint">{{footText}}</text>
+    <text wx:if="{{cloudHint}}" class="t-hint cloud-hint">{{cloudHint}}</text>
   </view>
 </view>

@@ -153,4 +153,21 @@ const reset = () => {
   const saved = await user.saveProfile({ nickName: '宇少', avatar: '' });
   log('23 保存昵称:', saved.nickName, '| 读回:', (await user.getProfile()).nickName);
   log('24 头像降级(无云无文件系统):', (await user.persistAvatar('/tmp/fake.png')).where);
+
+  /* ── 云函数未部署时的诊断 ── */
+  wx.cloud = {
+    callFunction: () =>
+      Promise.reject({
+        errMsg:
+          'cloud.callFunction:fail Error: errCode: -501000 | errMsg: FunctionName parameter could not be found.',
+      }),
+  };
+  const st2 = await auth.ensureLogin(true);
+  log('25 未部署云函数 → 归类:', st2.reason, '| 提示:', auth.hint(st2.reason));
+
+  wx.cloud = {
+    callFunction: () => Promise.resolve({ result: { ok: true, openid: 'oTest1234' } }),
+  };
+  const st3 = await auth.ensureLogin(true);
+  log('26 部署后重新探测:', st3.cloudOk, st3.openid, '| 提示:', JSON.stringify(auth.hint(st3.reason)));
 })();

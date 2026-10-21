@@ -10,6 +10,7 @@ Page({
     initial: '我',
     bound: false,
     cloudOk: false,
+    cloudHint: '',
     statusText: '',
     footText: '',
     pending: 0,
@@ -50,6 +51,7 @@ Page({
       avatar: profile.avatar || '',
       initial: nickName ? nickName.slice(0, 1) : '我',
       cloudOk,
+      cloudHint: cloudOk ? '' : auth.hint(loginState.reason),
       pending,
       statusText: cloudOk ? '单人模式' : '本地模式',
       footText,
@@ -70,8 +72,10 @@ Page({
 
   async onSyncTap() {
     if (this.data.syncing) return;
-    this.setData({ syncing: true, footText: '正在同步…' });
+    this.setData({ syncing: true, footText: '正在同步…', cloudHint: '' });
 
+    // 手动点同步时重新探测登录态，否则本会话一旦降级就再也回不来
+    await auth.ensureLogin(true);
     await this.sync();
 
     this.setData({ syncing: false });

@@ -125,3 +125,11 @@
   padding: 60rpx 0 0;
   text-align: center;
 }
+
+.cloud-hint {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--ink-3);
+  opacity: 0.75;
+}
