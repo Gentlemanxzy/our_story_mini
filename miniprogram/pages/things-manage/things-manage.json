@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "管理小事"
+  "navigationBarTitleText": "管理小事",
+  "usingComponents": {
+    "category-picker": "/components/category-picker/index"
+  }
 }

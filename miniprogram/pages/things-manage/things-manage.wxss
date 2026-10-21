@@ -177,3 +177,58 @@
   color: var(--accent);
   line-height: 1;
 }
+
+/* ── 自定义分类 ── */
+.cat-row {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 0;
+  border-top: 1rpx solid var(--line);
+}
+
+.cat-row:first-child {
+  border-top: none;
+}
+
+.cat-name {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.cat-count {
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+
+.cat-act {
+  flex-shrink: 0;
+  padding: 6rpx 0 6rpx 22rpx;
+  font-size: 25rpx;
+  color: var(--accent);
+}
+
+.cat-act.is-danger {
+  color: var(--ink-3);
+}
+
+.cat-new {
+  margin-top: 8rpx;
+  padding-top: 22rpx;
+  border-top: 1rpx dashed var(--line);
+  font-size: 26rpx;
+  color: var(--accent);
+  text-align: center;
+}
+
+.cat-empty {
+  display: block;
+  line-height: 1.7;
+  padding-bottom: 4rpx;
+}
+
+.foot-tip {
+  display: block;
+  padding: 48rpx 8rpx 0;
+  line-height: 1.7;
+}

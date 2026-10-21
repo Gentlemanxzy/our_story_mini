@@ -1,10 +1,15 @@
 const thingsSvc = require('../../services/things');
+const categoriesSvc = require('../../services/categories');
 const { CATEGORIES, STATUS_MAP, MOOD_MAP } = require('../../constants');
 const { calcProgress, groupByCategory, formatDate } = require('../../utils/format');
 
+const ALL = { key: '', name: '全部' };
+
 Page({
   data: {
-    categories: [{ key: '', name: '全部' }].concat(CATEGORIES),
+    // 首屏先用内置分类占位，拿到分类表后替换
+    categories: [ALL].concat(CATEGORIES.map(c => ({ key: c.key, name: c.name }))),
+    catList: [],
     activeCategory: '',
     keyword: '',
     groups: [],
@@ -32,14 +37,30 @@ Page({
   },
 
   async refresh() {
+    const cats = await categoriesSvc.list();
+
+    // 选中的自定义分类若已被删除，回落到「全部」
+    let active = this.data.activeCategory;
+    if (active && !cats.some(c => c.key === active)) {
+      active = '';
+    }
+
     const all = await thingsSvc.list();
     const progress = calcProgress(all);
     const view = await thingsSvc.list({
       keyword: this.data.keyword,
-      category: this.data.activeCategory,
+      category: active,
     });
-    const groups = groupByCategory(view.map(t => this.decorate(t)));
-    this.setData({ groups, progress, loaded: true });
+    const groups = groupByCategory(view.map(t => this.decorate(t)), cats);
+
+    this.setData({
+      catList: cats,
+      categories: [ALL].concat(cats.map(c => ({ key: c.key, name: c.name }))),
+      activeCategory: active,
+      groups,
+      progress,
+      loaded: true,
+    });
   },
 
   onSearchInput(e) {
@@ -65,6 +86,8 @@ Page({
 
   onSheetClose() {
     this.setData({ sheetVisible: false });
+    // 记录面板里可能新建了分类，回来时同步筛选条
+    this.refresh();
   },
 
   async onSheetSave(e) {

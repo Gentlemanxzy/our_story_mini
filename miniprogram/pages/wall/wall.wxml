@@ -91,6 +91,7 @@
 <record-sheet
   visible="{{sheetVisible}}"
   thing="{{current}}"
+  categories="{{catList}}"
   bind:close="onSheetClose"
   bind:save="onSheetSave"
 />

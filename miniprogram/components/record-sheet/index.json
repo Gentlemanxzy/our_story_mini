@@ -1,4 +1,6 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "category-picker": "/components/category-picker/index"
+  }
 }

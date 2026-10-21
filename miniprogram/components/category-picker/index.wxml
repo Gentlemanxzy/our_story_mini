@@ -1,0 +1,56 @@
+<view class="mask {{visible ? 'is-open' : ''}}" catchtap="onClose" catchtouchmove="noop">
+  <view class="sheet" catchtap="noop">
+    <view class="grip"></view>
+
+    <!-- 列表态 -->
+    <block wx:if="{{mode === 'list'}}">
+      <view class="head">
+        <text class="title serif">选个分类</text>
+        <text class="close t-hint" bindtap="onClose">关闭</text>
+      </view>
+
+      <scroll-view scroll-y class="body">
+        <view class="grid">
+          <view
+            wx:for="{{list}}"
+            wx:key="key"
+            class="item {{value === item.key ? 'is-on' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="onSelect"
+          >
+            <text class="item-name">{{item.name}}</text>
+          </view>
+
+          <view class="item is-create" bindtap="onCreateStart">
+            <text class="item-name">＋ 新建</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <text class="t-hint hint">内置分类不可修改，自定义分类可在「管理小事」里改名或删除</text>
+    </block>
+
+    <!-- 新建态 -->
+    <block wx:else>
+      <view class="head">
+        <text class="title serif">新建分类</text>
+        <text class="close t-hint" bindtap="onBack">返回</text>
+      </view>
+
+      <input
+        class="input"
+        value="{{draft}}"
+        maxlength="8"
+        focus="{{mode === 'create'}}"
+        placeholder="比如：旅行、厨房、怪癖"
+        placeholder-class="input-ph"
+        bindinput="onDraftInput"
+        bindconfirm="onConfirmCreate"
+      />
+
+      <view class="acts">
+        <view class="btn-primary flex1" bindtap="onConfirmCreate">建好了</view>
+      </view>
+    </block>
+  </view>
+</view>

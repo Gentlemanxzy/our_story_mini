@@ -1,5 +1,5 @@
 <view class="page">
-  <!-- 自定义新建 -->
+  <!-- 新建一件小事 -->
   <view class="card block">
     <view class="block-head">
       <text class="block-title serif">新建一件小事</text>
@@ -15,15 +15,45 @@
     />
 
     <view class="row-2">
-      <picker mode="selector" range="{{categoryNames}}" value="{{catIndex}}" bindchange="onCatChange">
-        <view class="picker">
-          <text class="t-hint">分类</text>
-          <text class="picker-val">{{categoryNames[catIndex]}}</text>
-          <text class="picker-arrow">›</text>
-        </view>
-      </picker>
+      <view class="picker" bindtap="onOpenCat">
+        <text class="t-hint">分类</text>
+        <text class="picker-val">{{selectedCatName}}</text>
+        <text class="picker-arrow">›</text>
+      </view>
       <view class="btn-primary add" bindtap="onAdd">加入清单</view>
     </view>
+  </view>
+
+  <!-- 自定义分类 -->
+  <view class="section-head">
+    <text class="section-title serif">自定义分类</text>
+    <text class="t-hint">{{customCats.length}} 个</text>
+  </view>
+
+  <view wx:if="{{customCats.length}}" class="card block">
+    <view wx:for="{{customCats}}" wx:key="key" class="cat-row">
+      <text class="cat-name">{{item.name}}</text>
+      <text class="t-hint cat-count">{{item.count}} 件</text>
+      <text
+        class="cat-act"
+        data-key="{{item.key}}"
+        data-name="{{item.name}}"
+        bindtap="onRenameCat"
+      >改名</text>
+      <text
+        class="cat-act is-danger"
+        data-key="{{item.key}}"
+        data-name="{{item.name}}"
+        data-count="{{item.count}}"
+        bindtap="onDeleteCat"
+      >删除</text>
+    </view>
+    <view class="cat-new" bindtap="onNewCat">＋ 新建分类</view>
+  </view>
+
+  <view wx:else class="card block">
+    <text class="t-hint cat-empty">还没有自定义分类。点下面按钮新建，或在新建小事时从分类里现加一个。</text>
+    <view class="cat-new" bindtap="onNewCat">＋ 新建分类</view>
   </view>
 
   <!-- 当前清单 -->
@@ -82,4 +112,16 @@
     </block>
   </view>
   <view wx:else class="empty">默认清单已经全部加入</view>
+
+  <view class="foot-tip t-hint">内置 10 个分类不可修改，自定义分类可改名、可删除（需先移走里面的小事）</view>
 </view>
+
+<category-picker
+  visible="{{catPickerVisible}}"
+  list="{{catList}}"
+  value="{{selectedCatKey}}"
+  startInCreate="{{catPickerStartInCreate}}"
+  bind:close="onCatPickerClose"
+  bind:select="onCatSelect"
+  bind:create="onCatCreate"
+/>

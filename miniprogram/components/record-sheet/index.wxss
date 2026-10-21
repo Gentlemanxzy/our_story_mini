@@ -104,6 +104,29 @@
   color: var(--accent, #C2603F);
 }
 
+/* 分类行 */
+.cat-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+  padding: 0 28rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line, #E8DFD1);
+  background: #FFFFFF;
+}
+
+.cat-value {
+  font-size: 28rpx;
+  color: var(--ink, #3D3630);
+}
+
+.cat-arrow {
+  font-size: 32rpx;
+  color: var(--ink-3, #A99F94);
+  line-height: 1;
+}
+
 /* 日期 */
 .picker {
   height: 88rpx;

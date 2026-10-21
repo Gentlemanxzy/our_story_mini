@@ -1,6 +1,6 @@
 # 数据库安全规则
 
-三个集合都在 **云开发控制台 → 数据库 → 选中集合 → 权限设置 → 自定义安全规则** 里粘贴。
+四个集合都在 **云开发控制台 → 数据库 → 选中集合 → 权限设置 → 自定义安全规则** 里粘贴。
 
 ## 为什么是这套规则
 
@@ -34,6 +34,18 @@
   "write": false
 }
 ```
+
+## `categories`（自定义分类）
+
+```json
+{
+  "read": "auth.openid in doc.members",
+  "write": false
+}
+```
+
+> 分类表同样要带 `members` 数组。内置 10 个分类**不落库**（存在 `constants.js` 里），
+> 这张表只存用户自建的分类；写入走 `category_upsert` / `category_delete` 云函数。
 
 ## `users`
 
@@ -72,5 +84,6 @@
 |---|---|---|
 | `things` | `coupleId` + `order` | 清单按序拉取 |
 | `things` | `coupleId` + `status` | 章节页统计 |
+| `categories` | `coupleId` + `order` | 自定义分类按序展示 |
 
 **不要给 `couples.code` 建唯一索引**：唯一索引下缺失字段视为 `null`，全集合最多只能有一条无 `code` 的记录，且绑定后把 `code` 置空会冲突。唯一性由 `couple_create` 云函数在事务内「查重 → 插入」保证。

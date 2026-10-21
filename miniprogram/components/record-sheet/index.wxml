@@ -9,6 +9,14 @@
 
     <scroll-view scroll-y class="sheet-body">
       <view class="field">
+        <text class="label">分类</text>
+        <view class="cat-field" bindtap="onOpenCat">
+          <text class="cat-value">{{catName}}</text>
+          <text class="cat-arrow">›</text>
+        </view>
+      </view>
+
+      <view class="field">
         <text class="label">现在到哪一步了</text>
         <view class="chips">
           <view
@@ -61,3 +69,12 @@
     <view class="btn-primary save" bindtap="onSave">记下来</view>
   </view>
 </view>
+
+<category-picker
+  visible="{{catPickerVisible}}"
+  list="{{catList}}"
+  value="{{form.category}}"
+  bind:close="onCatPickerClose"
+  bind:select="onCatSelect"
+  bind:create="onCatCreate"
+/>

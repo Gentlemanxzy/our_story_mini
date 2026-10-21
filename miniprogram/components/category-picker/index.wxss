@@ -1,0 +1,132 @@
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* 高于 record-sheet(100)，才能在记录面板之上再弹一层 */
+  z-index: 200;
+  background: rgba(61, 54, 48, 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+.mask.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper, #FDFBF7);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 16rpx 36rpx calc(28rpx + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.mask.is-open .sheet {
+  transform: translateY(0);
+}
+
+.grip {
+  width: 64rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: var(--line, #E8DFD1);
+  margin: 8rpx auto 20rpx;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 20rpx;
+}
+
+.title {
+  font-size: 34rpx;
+  color: var(--ink, #3D3630);
+}
+
+.close {
+  padding: 4rpx 0 4rpx 16rpx;
+}
+
+.body {
+  flex: 1;
+  max-height: 46vh;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 4rpx 0;
+}
+
+.item {
+  padding: 16rpx 26rpx;
+  margin: 0 16rpx 16rpx 0;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--line, #E8DFD1);
+  background: #FFFFFF;
+}
+
+.item-name {
+  font-size: 26rpx;
+  color: var(--ink-2, #6E645B);
+}
+
+.item.is-on {
+  background: var(--accent-soft, #F6E6DC);
+  border-color: var(--accent, #C2603F);
+}
+
+.item.is-on .item-name {
+  color: var(--accent, #C2603F);
+}
+
+.item.is-create {
+  border-style: dashed;
+}
+
+.item.is-create .item-name {
+  color: var(--accent, #C2603F);
+}
+
+.hint {
+  display: block;
+  padding-top: 12rpx;
+  line-height: 1.6;
+}
+
+/* 新建态 */
+.input {
+  height: 96rpx;
+  padding: 0 26rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line, #E8DFD1);
+  background: #FFFFFF;
+  font-size: 28rpx;
+  color: var(--ink, #3D3630);
+}
+
+.input-ph {
+  color: var(--ink-3, #A99F94);
+}
+
+.acts {
+  display: flex;
+  margin-top: 32rpx;
+}
+
+.flex1 {
+  flex: 1;
+}
