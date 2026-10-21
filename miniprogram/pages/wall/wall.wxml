@@ -64,14 +64,18 @@
         >
           <text class="no serif">{{thing.noText}}</text>
           <view class="row-body">
-            <text class="row-title {{thing.status === 'treasured' ? 'is-done' : ''}}">{{thing.title}}</text>
+            <view class="row-title {{thing.status === 'treasured' ? 'is-done' : ''}}">{{thing.title}}</view>
+
+            <!-- 元信息一行：状态 / 日期 / 心情 -->
             <view class="row-meta">
               <text class="dot tone-{{thing.tone}}"></text>
               <text class="status tone-text-{{thing.tone}}">{{thing.statusName}}</text>
               <text wx:if="{{thing.dateText}}" class="t-hint meta-item">{{thing.dateText}}</text>
               <text wx:if="{{thing.moodGlyph}}" class="mood-glyph">{{thing.moodGlyph}}</text>
-              <text wx:if="{{thing.note}}" class="t-hint meta-item">「{{thing.note}}」</text>
             </view>
+
+            <!-- 笔记独立成块，左对齐、最多两行 -->
+            <view wx:if="{{thing.note}}" class="row-note">{{thing.note}}</view>
           </view>
 
           <view

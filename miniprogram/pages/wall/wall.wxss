@@ -143,7 +143,7 @@
   flex-shrink: 0;
   font-size: 24rpx;
   color: var(--ink-3);
-  line-height: 1.7;
+  line-height: 1.55;
   letter-spacing: 0.04em;
 }
 
@@ -153,7 +153,10 @@
 }
 
 .row-title {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   font-size: 30rpx;
   color: var(--ink);
   line-height: 1.55;
@@ -197,13 +200,29 @@
   color: var(--accent);
 }
 
+/* 笔记：独立成块，左侧一道细线做批注感，最多两行 */
+.row-note {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-top: 14rpx;
+  padding-left: 16rpx;
+  border-left: 3rpx solid var(--line);
+  font-size: 25rpx;
+  line-height: 1.62;
+  color: var(--ink-2);
+  word-break: break-word;
+}
+
 /* 缩略图 */
 .row-cover {
   position: relative;
   flex-shrink: 0;
+  align-self: flex-start;
   width: 104rpx;
   height: 104rpx;
-  margin-left: 18rpx;
+  margin: 2rpx 0 0 18rpx;
   border-radius: 12rpx;
   overflow: hidden;
   background: var(--paper-3);
