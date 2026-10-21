@@ -1,0 +1,182 @@
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(61, 54, 48, 0.28);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s ease, visibility 0.24s ease;
+}
+
+.mask.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper, #FDFBF7);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 16rpx 36rpx calc(24rpx + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.mask.is-open .sheet {
+  transform: translateY(0);
+}
+
+.grip {
+  width: 64rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
+  background: var(--line, #E8DFD1);
+  margin: 8rpx auto 20rpx;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid var(--line, #E8DFD1);
+}
+
+.sheet-title {
+  flex: 1;
+  font-size: 36rpx;
+  line-height: 1.4;
+  color: var(--ink, #3D3630);
+}
+
+.sheet-close {
+  flex-shrink: 0;
+  padding: 4rpx 0 4rpx 16rpx;
+}
+
+.sheet-body {
+  flex: 1;
+  max-height: 56vh;
+  padding-top: 8rpx;
+}
+
+.field {
+  margin-top: 32rpx;
+}
+
+.label {
+  display: block;
+  font-size: 24rpx;
+  color: var(--ink-3, #A99F94);
+  letter-spacing: 0.08em;
+  margin-bottom: 16rpx;
+}
+
+/* 状态胶囊 */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.chip {
+  padding: 14rpx 28rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--line, #E8DFD1);
+  background: #FFFFFF;
+  font-size: 26rpx;
+  color: var(--ink-2, #6E645B);
+}
+
+.chip.is-on {
+  background: var(--accent-soft, #F6E6DC);
+  border-color: var(--accent, #C2603F);
+  color: var(--accent, #C2603F);
+}
+
+/* 日期 */
+.picker {
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 28rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line, #E8DFD1);
+  background: #FFFFFF;
+  font-size: 28rpx;
+  color: var(--ink, #3D3630);
+}
+
+/* 心情 5 列 x 2 行 */
+.moods {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.mood {
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12rpx 0;
+  border-radius: 16rpx;
+}
+
+.mood-glyph {
+  font-size: 38rpx;
+  line-height: 1.2;
+  color: var(--ink-2, #6E645B);
+}
+
+.mood-name {
+  font-size: 22rpx;
+  color: var(--ink-3, #A99F94);
+  margin-top: 4rpx;
+}
+
+.mood.is-on {
+  background: var(--accent-soft, #F6E6DC);
+}
+
+.mood.is-on .mood-glyph,
+.mood.is-on .mood-name {
+  color: var(--accent, #C2603F);
+}
+
+/* 一句话 */
+.note {
+  width: 100%;
+  height: 152rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line, #E8DFD1);
+  background: #FFFFFF;
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: var(--ink, #3D3630);
+  box-sizing: border-box;
+}
+
+.note-ph {
+  color: var(--ink-3, #A99F94);
+}
+
+.counter {
+  display: block;
+  text-align: right;
+  margin-top: 8rpx;
+}
+
+.save {
+  margin-top: 32rpx;
+  flex-shrink: 0;
+}

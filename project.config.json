@@ -45,8 +45,8 @@
     "disableSWC": true
   },
   "appid": "wx1d57f098520957db",
-  "projectname": "quickstart-wx-cloud",
-  "libVersion": "2.20.1",
+  "projectname": "OurStory",
+  "libVersion": "3.17.3",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "condition": {
     "search": {
@@ -64,9 +64,11 @@
     "miniprogram": {
       "list": [
         {
-          "id": -1,
-          "name": "db guide",
-          "pathName": "pages/databaseGuide/databaseGuide"
+          "id": 0,
+          "name": "打卡墙",
+          "pathName": "pages/wall/wall",
+          "query": "",
+          "scene": null
         }
       ]
     }

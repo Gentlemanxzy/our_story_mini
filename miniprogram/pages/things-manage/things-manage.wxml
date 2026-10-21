@@ -1,0 +1,85 @@
+<view class="page">
+  <!-- 自定义新建 -->
+  <view class="card block">
+    <view class="block-head">
+      <text class="block-title serif">新建一件小事</text>
+    </view>
+
+    <input
+      class="text-input"
+      value="{{newTitle}}"
+      maxlength="30"
+      placeholder="想和对方一起做什么"
+      placeholder-class="ph"
+      bindinput="onTitleInput"
+    />
+
+    <view class="row-2">
+      <picker mode="selector" range="{{categoryNames}}" value="{{catIndex}}" bindchange="onCatChange">
+        <view class="picker">
+          <text class="t-hint">分类</text>
+          <text class="picker-val">{{categoryNames[catIndex]}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+      <view class="btn-primary add" bindtap="onAdd">加入清单</view>
+    </view>
+  </view>
+
+  <!-- 当前清单 -->
+  <view class="section-head">
+    <text class="section-title serif">当前清单</text>
+    <text class="t-hint">{{items.length}} 件</text>
+  </view>
+
+  <view wx:if="{{items.length}}" class="card list">
+    <view wx:for="{{items}}" wx:key="_id" class="row">
+      <text class="no serif">{{item.noText}}</text>
+      <view class="row-body">
+        <text class="row-title">{{item.title}}</text>
+        <text class="t-hint">{{item.categoryName}}</text>
+      </view>
+      <text
+        class="del"
+        data-id="{{item._id}}"
+        data-title="{{item.title}}"
+        data-status="{{item.status}}"
+        bindtap="onDelete"
+      >删除</text>
+    </view>
+  </view>
+  <view wx:elif="{{loaded}}" class="empty">清单还是空的</view>
+
+  <!-- 默认清单 -->
+  <view class="section-head">
+    <text class="section-title serif">默认清单</text>
+    <text class="t-hint">还剩 {{library.length}} 件可加入</text>
+  </view>
+
+  <view wx:if="{{library.length}}" class="card block">
+    <view class="lib-head" bindtap="toggleLibrary">
+      <text class="t-sub">从默认小事库里挑，点一下加入</text>
+      <text class="lib-toggle">{{showLibrary ? '收起' : '展开'}}</text>
+    </view>
+
+    <block wx:if="{{showLibrary}}">
+      <view class="lib-actions">
+        <view class="mini-btn" bindtap="onAddAllVisible">全部加入（{{library.length}}）</view>
+      </view>
+      <view class="lib-list">
+        <view
+          wx:for="{{library}}"
+          wx:key="index"
+          class="lib-row"
+          data-index="{{item.index}}"
+          bindtap="onPickDefault"
+        >
+          <text class="lib-title">{{item.title}}</text>
+          <text class="lib-cat t-hint">{{item.categoryName}}</text>
+          <text class="lib-plus">＋</text>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view wx:else class="empty">默认清单已经全部加入</view>
+</view>

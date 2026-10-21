@@ -1,0 +1,50 @@
+<view class="page">
+  <!-- 身份卡 -->
+  <view class="card identity">
+    <view class="avatar serif">{{bound ? '俩' : '我'}}</view>
+    <view class="identity-body">
+      <text class="nick serif">{{nickName || '还没起名字'}}</text>
+      <text class="t-hint">{{bound ? '已和对方绑定' : '单人模式'}}</text>
+    </view>
+    <view wx:if="{{!bound}}" class="mini-btn" bindtap="goBind">去绑定</view>
+  </view>
+
+  <view class="counts">
+    <view class="count-item">
+      <text class="count-num serif">{{counts.total}}</text>
+      <text class="count-label">件小事</text>
+    </view>
+    <view class="count-sep"></view>
+    <view class="count-item">
+      <text class="count-num serif accent">{{counts.done}}</text>
+      <text class="count-label">已经珍藏</text>
+    </view>
+  </view>
+
+  <!-- 菜单 -->
+  <view class="card menu">
+    <view class="row" bindtap="goManage">
+      <text class="row-label">管理小事</text>
+      <text class="row-sub t-hint">增删 · 自定义 · 排序</text>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row" bindtap="goBind">
+      <text class="row-label">情侣绑定</text>
+      <text class="row-sub t-hint">{{bound ? '查看对方' : '邀请码互绑'}}</text>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row" bindtap="onReset">
+      <text class="row-label">重新体验首次引导</text>
+      <text class="row-sub t-hint">清空本机数据</text>
+      <text class="row-arrow">›</text>
+    </view>
+    <view class="row" bindtap="onAbout">
+      <text class="row-label">关于</text>
+      <text class="row-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="foot">
+    <text class="t-hint">当前为本地演示数据 · 云端接入后自动同步</text>
+  </view>
+</view>

@@ -1,0 +1,52 @@
+<view class="page">
+  <view class="head">
+    <text class="title serif">两个人一起</text>
+    <text class="t-sub">一方生成邀请码，另一方输入，绑定后双方权限相同</text>
+  </view>
+
+  <!-- 我的邀请码 -->
+  <view class="card block">
+    <view class="block-head">
+      <text class="block-title serif">我的邀请码</text>
+      <text class="t-hint">7 天内有效</text>
+    </view>
+
+    <view wx:if="{{myCode}}" class="code-box">
+      <text class="code serif">{{myCode}}</text>
+    </view>
+    <view wx:else class="code-empty t-hint">还没有生成</view>
+
+    <view class="acts">
+      <view class="btn-primary flex1" bindtap="onGenerate">{{myCode ? '重新生成' : '生成邀请码'}}</view>
+      <view wx:if="{{myCode}}" class="btn-primary is-plain copy" bindtap="onCopy">复制</view>
+    </view>
+    <text class="t-hint note">接入云端后，邀请码由服务端生成并支持有效期与二维码。</text>
+  </view>
+
+  <!-- 输入对方邀请码 -->
+  <view class="card block">
+    <view class="block-head">
+      <text class="block-title serif">输入对方的邀请码</text>
+    </view>
+
+    <input
+      class="code-input serif"
+      value="{{code}}"
+      maxlength="6"
+      placeholder="6 位字母数字"
+      placeholder-class="code-ph"
+      bindinput="onInput"
+    />
+
+    <view class="acts">
+      <view class="btn-primary flex1" bindtap="onSubmit">绑定</view>
+      <view class="btn-primary is-plain copy" bindtap="onScan">扫一扫</view>
+    </view>
+  </view>
+
+  <view class="tips">
+    <text class="t-hint">· 绑定后两人的清单、打卡记录实时同步</text>
+    <text class="t-hint">· 只有你们两个人能读写这个空间</text>
+    <text class="t-hint">· 解绑后数据保留，转为只读</text>
+  </view>
+</view>

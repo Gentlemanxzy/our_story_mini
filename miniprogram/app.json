@@ -1,14 +1,43 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/example/index"
+    "pages/wall/wall",
+    "pages/chapters/chapters",
+    "pages/mine/mine",
+    "pages/bind/bind",
+    "pages/things-manage/things-manage"
   ],
   "window": {
-    "backgroundColor": "#F6F6F6",
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "backgroundColor": "#FDFBF7",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FDFBF7",
+    "navigationBarTitleText": "我们的小事",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#B3A89C",
+    "selectedColor": "#C2603F",
+    "backgroundColor": "#FDFBF7",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/wall/wall",
+        "text": "小事",
+        "iconPath": "images/tabbar/wall.png",
+        "selectedIconPath": "images/tabbar/wall-active.png"
+      },
+      {
+        "pagePath": "pages/chapters/chapters",
+        "text": "章节",
+        "iconPath": "images/tabbar/chapters.png",
+        "selectedIconPath": "images/tabbar/chapters-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tabbar/mine.png",
+        "selectedIconPath": "images/tabbar/mine-active.png"
+      }
+    ]
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",

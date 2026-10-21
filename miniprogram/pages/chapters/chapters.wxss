@@ -1,0 +1,258 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.head {
+  padding: 8rpx 0 32rpx;
+}
+
+.title {
+  display: block;
+  font-size: 52rpx;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+/* ── 总进度 ── */
+.hero {
+  padding: 44rpx 40rpx 36rpx;
+  text-align: center;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFCF7 100%);
+}
+
+.hero-num {
+  font-size: 92rpx;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.hero-total {
+  font-size: 36rpx;
+  color: var(--ink-3);
+  margin-left: 4rpx;
+}
+
+.hero .bar {
+  margin-top: 24rpx;
+}
+
+.hero-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+
+.badge {
+  padding: 8rpx 24rpx;
+  border-radius: 999rpx;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 24rpx;
+  letter-spacing: 0.08em;
+}
+
+/* ── 区块标题 ── */
+.section-head {
+  padding: 48rpx 8rpx 18rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  color: var(--ink-2);
+  letter-spacing: 0.16em;
+}
+
+/* ── 章节阶梯 ── */
+.ladder {
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.step:first-child {
+  border-top: none;
+}
+
+.step-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  border: 1rpx solid var(--line);
+  background: transparent;
+  margin-right: 22rpx;
+  flex-shrink: 0;
+}
+
+.step.is-reached .step-dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.step-lv {
+  width: 108rpx;
+  flex-shrink: 0;
+  font-size: 26rpx;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+.step-name {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--ink-2);
+}
+
+.step-min {
+  flex-shrink: 0;
+}
+
+.step.is-current {
+  background: var(--accent-soft);
+}
+
+.step.is-current .step-lv,
+.step.is-current .step-name {
+  color: var(--accent);
+}
+
+/* ── 分布 ── */
+.stats {
+  display: flex;
+}
+
+.stat {
+  flex: 1;
+  padding: 28rpx 12rpx;
+  text-align: center;
+}
+
+.stat + .stat {
+  margin-left: 16rpx;
+}
+
+.stat-num {
+  display: block;
+  font-size: 44rpx;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.stat-num.accent {
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: var(--ink-3);
+}
+
+/* ── 心情 ── */
+.mood-box {
+  padding: 12rpx 28rpx;
+  background: #FFFFFF;
+}
+
+.mood-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.mood-row + .mood-row {
+  border-top: 1rpx solid var(--line);
+}
+
+.mood-glyph {
+  width: 44rpx;
+  font-size: 32rpx;
+  color: var(--accent);
+}
+
+.mood-name {
+  width: 88rpx;
+  font-size: 26rpx;
+  color: var(--ink-2);
+}
+
+.mood-bar {
+  flex: 1;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: var(--paper-3);
+  margin: 0 20rpx;
+  overflow: hidden;
+}
+
+.mood-bar-fill {
+  height: 100%;
+  border-radius: 4rpx;
+  background: linear-gradient(90deg, #E0A882, #C2603F);
+}
+
+/* ── 时间线 ── */
+.timeline {
+  padding-left: 8rpx;
+}
+
+.tl-item {
+  display: flex;
+}
+
+.tl-rail {
+  width: 44rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10rpx;
+}
+
+.tl-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.tl-line {
+  flex: 1;
+  width: 1rpx;
+  background: var(--line);
+  margin: 8rpx 0 0;
+}
+
+.tl-body {
+  flex: 1;
+  padding: 0 0 36rpx 8rpx;
+}
+
+.tl-top {
+  display: flex;
+  align-items: baseline;
+}
+
+.tl-title {
+  font-size: 29rpx;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.tl-glyph {
+  margin-left: 12rpx;
+  font-size: 26rpx;
+  color: var(--accent);
+}
+
+.tl-note {
+  display: block;
+  margin-top: 6rpx;
+  line-height: 1.6;
+}

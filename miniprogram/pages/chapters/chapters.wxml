@@ -1,0 +1,95 @@
+<view class="page">
+  <view class="head">
+    <text class="title serif">我们的章节</text>
+    <text class="t-sub">每一件被珍藏的小事，都是一个字</text>
+  </view>
+
+  <!-- 总进度 -->
+  <view class="card hero">
+    <view class="hero-num serif">{{progress.done}}<text class="hero-total">/{{progress.total}}</text></view>
+    <view class="t-sub">已经珍藏的小事</view>
+    <view class="bar">
+      <view class="bar-fill" style="width: {{progress.pct}}%"></view>
+    </view>
+    <view class="hero-foot">
+      <text class="badge serif">{{progress.levelText}}</text>
+      <text wx:if="{{progress.next}}" class="t-hint">距{{progress.next.name}}还差 {{progress.gap}} 件</text>
+      <text wx:else class="t-hint">终章达成</text>
+    </view>
+  </view>
+
+  <!-- 等级阶梯 -->
+  <view class="section-head">
+    <text class="section-title serif">章 节</text>
+  </view>
+  <view class="card ladder">
+    <view wx:for="{{levels}}" wx:key="lv" class="step {{item.reached ? 'is-reached' : ''}} {{item.current ? 'is-current' : ''}}">
+      <view class="step-dot"></view>
+      <text class="step-lv serif">Lv.{{item.lv}}</text>
+      <text class="step-name">{{item.name}}</text>
+      <text class="step-min t-hint">{{item.min}}%</text>
+    </view>
+  </view>
+
+  <!-- 分布 -->
+  <view class="section-head">
+    <text class="section-title serif">分 布</text>
+  </view>
+  <view class="stats">
+    <view class="card stat">
+      <text class="stat-num serif accent">{{counts.treasured}}</text>
+      <text class="stat-label">已经珍藏</text>
+    </view>
+    <view class="card stat">
+      <text class="stat-num serif">{{counts.upcoming}}</text>
+      <text class="stat-label">还没发生</text>
+    </view>
+    <view class="card stat">
+      <text class="stat-num serif">{{counts.later}}</text>
+      <text class="stat-label">留给以后</text>
+    </view>
+  </view>
+
+  <!-- 心情 -->
+  <block wx:if="{{moods.length}}">
+    <view class="section-head">
+      <text class="section-title serif">最近的心情</text>
+    </view>
+    <view class="card mood-box">
+      <view wx:for="{{moods}}" wx:key="key" class="mood-row">
+        <text class="mood-glyph serif">{{item.glyph}}</text>
+        <text class="mood-name">{{item.name}}</text>
+        <view class="mood-bar">
+          <view class="mood-bar-fill" style="width: {{item.count * 20 > 100 ? 100 : item.count * 20}}%"></view>
+        </view>
+        <text class="t-hint">{{item.count}} 次</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 时间线 -->
+  <view class="section-head">
+    <text class="section-title serif">珍藏时间线</text>
+  </view>
+
+  <view wx:if="{{timeline.length}}" class="timeline">
+    <view wx:for="{{timeline}}" wx:key="_id" class="tl-item">
+      <view class="tl-rail">
+        <view class="tl-dot"></view>
+        <view class="tl-line" wx:if="{{index < timeline.length - 1}}"></view>
+      </view>
+      <view class="tl-body">
+        <view class="tl-top">
+          <text class="tl-title">{{item.title}}</text>
+          <text wx:if="{{item.glyph}}" class="tl-glyph">{{item.glyph}}</text>
+        </view>
+        <text class="t-hint">{{item.dateText}}</text>
+        <text wx:if="{{item.note}}" class="tl-note t-sub">「{{item.note}}」</text>
+      </view>
+    </view>
+  </view>
+
+  <view wx:elif="{{loaded}}" class="empty">
+    还没有被珍藏的小事<br />去「小事」里挑一件开始吧
+  </view>
+</view>

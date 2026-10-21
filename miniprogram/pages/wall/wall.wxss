@@ -1,0 +1,230 @@
+.page {
+  padding-top: 24rpx;
+}
+
+/* ── 顶部 ── */
+.head {
+  padding: 8rpx 0 28rpx;
+}
+
+.head-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 52rpx;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+}
+
+.level {
+  letter-spacing: 0.1em;
+}
+
+.progress-text {
+  margin-top: 10rpx;
+}
+
+.num {
+  font-size: 34rpx;
+  color: var(--accent);
+  padding: 0 2rpx;
+}
+
+/* .bar / .bar-fill 基础样式在 app.wxss */
+.bar {
+  margin-top: 18rpx;
+}
+
+.gap {
+  display: block;
+  margin-top: 12rpx;
+}
+
+/* ── 搜索 ── */
+.search {
+  display: flex;
+  align-items: center;
+  height: 84rpx;
+  padding: 0 24rpx;
+  background: #FFFFFF;
+}
+
+.search-icon {
+  font-size: 34rpx;
+  color: var(--ink-3);
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.search-ph {
+  color: var(--ink-3);
+}
+
+.search-clear {
+  font-size: 34rpx;
+  color: var(--ink-3);
+  padding: 0 4rpx 0 16rpx;
+}
+
+/* ── 分类 ── */
+.filter {
+  width: 100%;
+  margin-top: 24rpx;
+  white-space: nowrap;
+}
+
+.filter-inner {
+  display: inline-flex;
+  padding: 2rpx 0 6rpx;
+}
+
+.tag {
+  flex-shrink: 0;
+  padding: 12rpx 26rpx;
+  margin-right: 14rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--line);
+  background: transparent;
+  font-size: 25rpx;
+  color: var(--ink-2);
+}
+
+.tag.is-on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── 分组 ── */
+.group {
+  margin-top: 40rpx;
+}
+
+.group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 8rpx 14rpx;
+}
+
+.group-name {
+  font-size: 32rpx;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+}
+
+/* ── 行 ── */
+.list {
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  padding: 26rpx 28rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.row.is-first {
+  border-top: none;
+}
+
+.no {
+  width: 76rpx;
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: var(--ink-3);
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+.row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  display: block;
+  font-size: 30rpx;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.row-title.is-done {
+  color: var(--ink-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--line);
+}
+
+.row-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 8rpx;
+}
+
+.dot {
+  display: inline-block;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  margin-right: 10rpx;
+  background: var(--ink-3);
+}
+
+.status {
+  font-size: 23rpx;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+
+.meta-item {
+  margin-left: 16rpx;
+}
+
+.mood-glyph {
+  margin-left: 16rpx;
+  font-size: 26rpx;
+  color: var(--accent);
+}
+
+/* 状态配色 */
+.tone-muted { background: #C9C1B6; }
+.tone-warm { background: #D9A94E; }
+.tone-accent { background: var(--accent); }
+.tone-cool { background: var(--cool); }
+
+.tone-text-muted { color: var(--ink-3); }
+.tone-text-warm { color: #B98A2E; }
+.tone-text-accent { color: var(--accent); }
+.tone-text-cool { color: var(--cool); }
+
+/* ── 悬浮按钮 ── */
+.fab {
+  position: fixed;
+  right: 36rpx;
+  bottom: calc(48rpx + env(safe-area-inset-bottom));
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(194, 96, 63, 0.3);
+}
+
+.fab-plus {
+  color: #FFF9F4;
+  font-size: 44rpx;
+  line-height: 1;
+}

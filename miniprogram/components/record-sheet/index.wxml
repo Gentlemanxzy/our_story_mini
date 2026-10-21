@@ -1,0 +1,63 @@
+<view class="mask {{visible ? 'is-open' : ''}}" catchtap="onClose" catchtouchmove="noop">
+  <view class="sheet" catchtap="noop">
+    <view class="grip"></view>
+
+    <view class="sheet-head">
+      <text class="sheet-title serif">{{thing.title}}</text>
+      <text class="sheet-close t-hint" bindtap="onClose">关闭</text>
+    </view>
+
+    <scroll-view scroll-y class="sheet-body">
+      <view class="field">
+        <text class="label">现在到哪一步了</text>
+        <view class="chips">
+          <view
+            wx:for="{{statuses}}"
+            wx:key="key"
+            class="chip {{form.status === item.key ? 'is-on' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="onStatusTap"
+          >{{item.name}}</view>
+        </view>
+      </view>
+
+      <view class="field" wx:if="{{form.status === 'treasured'}}">
+        <text class="label">完成日期</text>
+        <picker mode="date" value="{{form.doneDate}}" end="{{today}}" bindchange="onDateChange">
+          <view class="picker">{{form.doneDate || '选择日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <text class="label">当时的心情</text>
+        <view class="moods">
+          <view
+            wx:for="{{moods}}"
+            wx:key="key"
+            class="mood {{form.mood === item.key ? 'is-on' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="onMoodTap"
+          >
+            <text class="mood-glyph">{{item.glyph}}</text>
+            <text class="mood-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="field">
+        <text class="label">写一句话</text>
+        <textarea
+          class="note"
+          value="{{form.note}}"
+          maxlength="140"
+          placeholder="那天发生了什么…"
+          placeholder-class="note-ph"
+          bindinput="onNoteInput"
+        />
+        <text class="t-hint counter">{{form.note.length}}/140</text>
+      </view>
+    </scroll-view>
+
+    <view class="btn-primary save" bindtap="onSave">记下来</view>
+  </view>
+</view>

@@ -1,0 +1,96 @@
+<view class="page">
+  <!-- 顶部：标题 + 进度 -->
+  <view class="head">
+    <view class="head-line">
+      <text class="title serif">我们的小事</text>
+      <text class="level t-hint">{{progress.levelText}}</text>
+    </view>
+    <view class="t-sub progress-text">
+      已珍藏 <text class="num serif">{{progress.done}}</text> / {{progress.total}} 件 · {{progress.pct}}%
+    </view>
+    <view class="bar">
+      <view class="bar-fill" style="width: {{progress.pct}}%"></view>
+    </view>
+    <text wx:if="{{progress.next}}" class="t-hint gap">
+      距「{{progress.next.name}}」还差 {{progress.gap}} 件
+    </text>
+    <text wx:else class="t-hint gap">全部珍藏，终章达成 ✿</text>
+  </view>
+
+  <!-- 搜索 -->
+  <view class="search card">
+    <text class="search-icon">⌕</text>
+    <input
+      class="search-input"
+      value="{{keyword}}"
+      placeholder="搜一件小事或一句记录"
+      placeholder-class="search-ph"
+      confirm-type="search"
+      bindinput="onSearchInput"
+    />
+    <text wx:if="{{keyword}}" class="search-clear" bindtap="onSearchClear">×</text>
+  </view>
+
+  <!-- 分类筛选 -->
+  <scroll-view scroll-x class="filter" enhanced show-scrollbar="{{false}}">
+    <view class="filter-inner">
+      <view
+        wx:for="{{categories}}"
+        wx:key="key"
+        class="tag {{activeCategory === item.key ? 'is-on' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onCategoryTap"
+      >{{item.name}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 列表 -->
+  <block wx:if="{{groups.length}}">
+    <view wx:for="{{groups}}" wx:key="key" class="group">
+      <view class="group-head">
+        <text class="group-name serif">{{item.name}}</text>
+        <text class="t-hint">{{item.items.length}} 件</text>
+      </view>
+
+      <view class="card list">
+        <view
+          wx:for="{{item.items}}"
+          wx:for-item="thing"
+          wx:for-index="idx"
+          wx:key="_id"
+          class="row {{idx === 0 ? 'is-first' : ''}}"
+          data-id="{{thing._id}}"
+          bindtap="onOpen"
+        >
+          <text class="no serif">{{thing.noText}}</text>
+          <view class="row-body">
+            <text class="row-title {{thing.status === 'treasured' ? 'is-done' : ''}}">{{thing.title}}</text>
+            <view class="row-meta">
+              <text class="dot tone-{{thing.tone}}"></text>
+              <text class="status tone-text-{{thing.tone}}">{{thing.statusName}}</text>
+              <text wx:if="{{thing.dateText}}" class="t-hint meta-item">{{thing.dateText}}</text>
+              <text wx:if="{{thing.moodGlyph}}" class="mood-glyph">{{thing.moodGlyph}}</text>
+              <text wx:if="{{thing.note}}" class="t-hint meta-item">「{{thing.note}}」</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view wx:elif="{{loaded}}" class="empty">
+    没有找到这件小事
+  </view>
+
+  <!-- 管理入口 -->
+  <view class="fab" bindtap="goManage">
+    <text class="fab-plus">＋</text>
+  </view>
+</view>
+
+<record-sheet
+  visible="{{sheetVisible}}"
+  thing="{{current}}"
+  bind:close="onSheetClose"
+  bind:save="onSheetSave"
+/>

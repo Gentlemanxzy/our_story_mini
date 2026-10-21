@@ -1,0 +1,179 @@
+.page {
+  padding-top: 24rpx;
+}
+
+.block {
+  padding: 28rpx;
+  background: #FFFFFF;
+}
+
+.block-head {
+  margin-bottom: 22rpx;
+}
+
+.block-title {
+  font-size: 30rpx;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+
+/* 输入 */
+.text-input {
+  height: 92rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line);
+  background: var(--paper-2);
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.ph {
+  color: var(--ink-3);
+}
+
+.row-2 {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+}
+
+.picker {
+  display: flex;
+  align-items: center;
+  height: 92rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line);
+  background: #FFFFFF;
+}
+
+.picker-val {
+  font-size: 27rpx;
+  color: var(--ink);
+  margin-left: 14rpx;
+}
+
+.picker-arrow {
+  font-size: 30rpx;
+  color: var(--ink-3);
+  margin-left: 8rpx;
+}
+
+.add {
+  flex: 1;
+  height: 92rpx;
+  margin-left: 20rpx;
+}
+
+/* 区块头 */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 44rpx 8rpx 16rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  color: var(--ink-2);
+  letter-spacing: 0.12em;
+}
+
+/* 清单 */
+.list {
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.row:first-child {
+  border-top: none;
+}
+
+.no {
+  width: 76rpx;
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: var(--ink-3);
+}
+
+.row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.row-title {
+  display: block;
+  font-size: 28rpx;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.del {
+  flex-shrink: 0;
+  padding: 8rpx 0 8rpx 24rpx;
+  font-size: 24rpx;
+  color: var(--ink-3);
+}
+
+/* 默认库 */
+.lib-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lib-toggle {
+  font-size: 24rpx;
+  color: var(--accent);
+}
+
+.lib-actions {
+  margin-top: 22rpx;
+}
+
+.mini-btn {
+  display: inline-block;
+  padding: 12rpx 28rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--accent);
+  color: var(--accent);
+  font-size: 24rpx;
+}
+
+.lib-list {
+  margin-top: 12rpx;
+}
+
+.lib-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-top: 1rpx solid var(--line);
+}
+
+.lib-title {
+  flex: 1;
+  font-size: 27rpx;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.lib-cat {
+  flex-shrink: 0;
+  margin: 0 16rpx;
+}
+
+.lib-plus {
+  flex-shrink: 0;
+  font-size: 32rpx;
+  color: var(--accent);
+  line-height: 1;
+}

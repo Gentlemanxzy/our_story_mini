@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "我们的小事",
+  "usingComponents": {
+    "record-sheet": "/components/record-sheet/index"
+  }
+}

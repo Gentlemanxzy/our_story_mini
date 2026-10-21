@@ -1,0 +1,119 @@
+.page {
+  padding-top: 32rpx;
+}
+
+/* ── 身份卡 ── */
+.identity {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+}
+
+.avatar {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.identity-body {
+  flex: 1;
+  padding-left: 24rpx;
+}
+
+.nick {
+  display: block;
+  font-size: 34rpx;
+  color: var(--ink);
+  margin-bottom: 4rpx;
+}
+
+.mini-btn {
+  flex-shrink: 0;
+  padding: 12rpx 28rpx;
+  border-radius: 999rpx;
+  border: 1rpx solid var(--accent);
+  color: var(--accent);
+  font-size: 24rpx;
+}
+
+/* ── 计数 ── */
+.counts {
+  display: flex;
+  align-items: center;
+  padding: 40rpx 8rpx 8rpx;
+}
+
+.count-item {
+  flex: 1;
+  text-align: center;
+}
+
+.count-num {
+  display: block;
+  font-size: 52rpx;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.count-num.accent {
+  color: var(--accent);
+}
+
+.count-label {
+  font-size: 22rpx;
+  color: var(--ink-3);
+}
+
+.count-sep {
+  width: 1rpx;
+  height: 56rpx;
+  background: var(--line);
+}
+
+/* ── 菜单 ── */
+.menu {
+  margin-top: 40rpx;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  min-height: 100rpx;
+  padding: 0 28rpx;
+  border-top: 1rpx solid var(--line);
+}
+
+.row:first-child {
+  border-top: none;
+}
+
+.row-label {
+  font-size: 29rpx;
+  color: var(--ink);
+}
+
+.row-sub {
+  flex: 1;
+  text-align: right;
+  padding-right: 12rpx;
+}
+
+.row-arrow {
+  font-size: 32rpx;
+  color: var(--ink-3);
+  line-height: 1;
+}
+
+.foot {
+  padding: 60rpx 0 0;
+  text-align: center;
+}
