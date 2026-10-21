@@ -170,4 +170,37 @@ const reset = () => {
   };
   const st3 = await auth.ensureLogin(true);
   log('26 部署后重新探测:', st3.cloudOk, st3.openid, '| 提示:', JSON.stringify(auth.hint(st3.reason)));
+
+  /* ── 照片存取 ── */
+  const media = require('../miniprogram/services/media');
+  const unlinked = [];
+  wx.env = { USER_DATA_PATH: '/udata' };
+  wx.getFileSystemManager = () => ({
+    saveFile: ({ filePath, success }) => success({ savedFilePath: filePath }),
+    unlink: ({ filePath }) => unlinked.push(filePath),
+  });
+
+  wx.cloud = {
+    uploadFile: ({ cloudPath }) => Promise.resolve({ fileID: `cloud://${cloudPath}` }),
+    deleteFile: () => {},
+  };
+  const a1 = await media.persistOne('/tmp/a.png');
+  log('27 云可用 → 上云:', a1.where, a1.src.slice(0, 7));
+
+  wx.cloud = { uploadFile: () => Promise.reject({ errMsg: 'down' }) };
+  const b1 = await media.persistOne('/tmp/b.png');
+  log('28 云不可用 → 落本机:', b1.where, b1.src.indexOf('/udata') === 0);
+
+  const m1 = await media.persistMany([a1.src, b1.src]);
+  log('29 批量持久化不改已有云路径:', m1[0] === a1.src, '| 本地保持:', m1[1] === b1.src);
+
+  wx.cloud = {
+    uploadFile: ({ cloudPath }) => Promise.resolve({ fileID: `cloud://${cloudPath}` }),
+    deleteFile: () => {},
+  };
+  const up = await media.upgradeLocal(m1);
+  log('30 本地照片补传:', up.changed, up.photos.every(p => media.isCloud(p)));
+
+  media.remove([up.photos[0], `${wx.env.USER_DATA_PATH}/photo_x.jpg`]);
+  log('31 删除时清理本机文件:', unlinked.length === 1, unlinked[0]);
 })();

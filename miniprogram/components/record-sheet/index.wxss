@@ -175,6 +175,80 @@
   color: var(--accent, #C2603F);
 }
 
+/* 照片 */
+.label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.label-row .label {
+  margin-bottom: 0;
+}
+
+.photos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.photo {
+  position: relative;
+  width: 216rpx;
+  height: 216rpx;
+  margin: 0 14rpx 14rpx 0;
+  border-radius: 14rpx;
+  overflow: hidden;
+  background: var(--paper-3, #F1EAE0);
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.photo-del {
+  position: absolute;
+  top: 6rpx;
+  right: 6rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: rgba(61, 54, 48, 0.55);
+  color: #FFF9F4;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-align: center;
+}
+
+.photo-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx dashed var(--line, #E8DFD1);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.photo-plus {
+  font-size: 44rpx;
+  line-height: 1;
+  color: var(--ink-3, #A99F94);
+}
+
+.photo-add-text {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: var(--ink-3, #A99F94);
+}
+
+.photo-tip {
+  display: block;
+  margin-top: 2rpx;
+}
+
 /* 一句话 */
 .note {
   width: 100%;

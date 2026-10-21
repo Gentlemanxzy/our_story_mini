@@ -27,12 +27,15 @@ Page({
   decorate(t) {
     const st = STATUS_MAP[t.status] || STATUS_MAP.want;
     const mood = t.mood ? MOOD_MAP[t.mood] : null;
+    const photos = Array.isArray(t.photos) ? t.photos.filter(Boolean) : [];
     return Object.assign({}, t, {
       noText: String(t.no).padStart(3, '0'),
       statusName: st.name,
       tone: st.tone,
       dateText: t.doneDate ? formatDate(t.doneDate) : '',
       moodGlyph: mood ? mood.glyph : '',
+      cover: photos[0] || '',
+      photoCount: photos.length,
     });
   },
 
@@ -75,13 +78,24 @@ Page({
     this.setData({ activeCategory: e.currentTarget.dataset.key }, () => this.refresh());
   },
 
-  onOpen(e) {
-    const id = e.currentTarget.dataset.id;
+  findThing(id) {
     const flat = [];
     this.data.groups.forEach(g => flat.push.apply(flat, g.items));
-    const thing = flat.find(t => t._id === id);
+    return flat.find(t => t._id === id);
+  },
+
+  onOpen(e) {
+    const thing = this.findThing(e.currentTarget.dataset.id);
     if (!thing) return;
     this.setData({ current: thing, sheetVisible: true });
+  },
+
+  /** 点缩略图直接看大图，不打开记录面板 */
+  onPreview(e) {
+    const thing = this.findThing(e.currentTarget.dataset.id);
+    const urls = (thing && thing.photos ? thing.photos : []).filter(Boolean);
+    if (!urls.length) return;
+    wx.previewImage({ urls, current: urls[0] });
   },
 
   onSheetClose() {

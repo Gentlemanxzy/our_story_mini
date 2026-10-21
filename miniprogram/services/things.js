@@ -12,6 +12,7 @@
  */
 const { DEFAULT_THINGS } = require('../data/default-things');
 const cloud = require('../utils/cloud');
+const media = require('./media');
 
 const CACHE_KEY = 'ourstory.things.v1';
 const QUEUE_KEY = 'ourstory.things.queue.v1';
@@ -160,6 +161,35 @@ async function flushKey(key) {
   }
 }
 
+/**
+ * 推云前把「只在本地」的照片补传成 fileID。
+ * 离线时存的本机路径推上去对方是看不到的，所以每次 flush 都试一次。
+ */
+async function upgradeEntryPhotos(entry) {
+  if (!entry || entry.kind !== 'thing' || entry.op !== 'upsert') return entry;
+
+  const targets = entry.items ? entry.items : entry.item ? [entry.item] : [];
+  const changed = [];
+
+  for (let i = 0; i < targets.length; i += 1) {
+    const t = targets[i];
+    if (!t || !Array.isArray(t.photos) || !t.photos.length) continue;
+    const r = await media.upgradeLocal(t.photos);
+    if (r.changed) {
+      t.photos = r.photos;
+      t.updatedAt = nowISO(); // 内容变了，得让云端与对方都能识别为更新
+      changed.push(t);
+    }
+  }
+
+  if (changed.length) {
+    const map = new Map(changed.map(t => [t._id, t]));
+    writeCache(readCache().map(t => map.get(t._id) || t));
+  }
+
+  return entry;
+}
+
 /** 把待传队列依次推上去；遇到失败停在原地，下次继续 */
 async function flush() {
   cloud.reset();
@@ -169,6 +199,7 @@ async function flush() {
   let pushed = 0;
   for (let i = 0; i < q.length; i += 1) {
     try {
+      await upgradeEntryPhotos(q[i]);
       await pushEntry(q[i]);
       pushed += 1;
     } catch (e) {

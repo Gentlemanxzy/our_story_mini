@@ -73,6 +73,16 @@
               <text wx:if="{{thing.note}}" class="t-hint meta-item">「{{thing.note}}」</text>
             </view>
           </view>
+
+          <view
+            wx:if="{{thing.cover}}"
+            class="row-cover"
+            data-id="{{thing._id}}"
+            catchtap="onPreview"
+          >
+            <image class="row-cover-img" src="{{thing.cover}}" mode="aspectFill" />
+            <text wx:if="{{thing.photoCount > 1}}" class="row-cover-count">{{thing.photoCount}}</text>
+          </view>
         </view>
       </view>
     </view>

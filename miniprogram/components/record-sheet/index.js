@@ -1,6 +1,7 @@
 const { STATUSES, MOODS } = require('../../constants');
 const { toISODate, buildCategoryMap } = require('../../utils/format');
 const categoriesSvc = require('../../services/categories');
+const media = require('../../services/media');
 
 const REASON_TEXT = {
   EMPTY: '给分类起个名字',
@@ -27,6 +28,11 @@ Component({
     catList: [],
     catName: '',
     catPickerVisible: false,
+    photos: [],
+    removedPhotos: [],
+    localPhotos: 0,
+    maxPhotos: media.MAX_PHOTOS,
+    saving: false,
     form: {
       status: 'want',
       doneDate: '',
@@ -39,10 +45,15 @@ Component({
   observers: {
     'visible, thing': function (visible, thing) {
       if (!visible || !thing) return;
+      const photos = Array.isArray(thing.photos) ? thing.photos.slice() : [];
       this.setData({
         today: toISODate(),
         catList: this.data.categories,
         catName: this.pickName(thing.category),
+        photos,
+        removedPhotos: [],
+        localPhotos: media.countLocal(photos),
+        saving: false,
         form: {
           status: thing.status || 'want',
           doneDate: thing.doneDate || '',
@@ -137,13 +148,85 @@ Component({
       wx.showToast({ title: '分类建好了', icon: 'none' });
     },
 
-    onSave() {
+    /* ── 照片 ── */
+
+    async onChoosePhoto() {
+      const remain = this.data.maxPhotos - this.data.photos.length;
+      if (remain <= 0) {
+        wx.showToast({ title: `最多 ${this.data.maxPhotos} 张`, icon: 'none' });
+        return;
+      }
+
+      try {
+        const res = await wx.chooseMedia({
+          count: remain,
+          mediaType: ['image'],
+          sizeType: ['compressed'],
+          sourceType: ['album', 'camera'],
+        });
+        const add = (res.tempFiles || []).map(f => f.tempFilePath).filter(Boolean);
+        if (!add.length) return;
+        const photos = this.data.photos.concat(add);
+        this.setData({ photos, localPhotos: media.countLocal(photos) });
+      } catch (e) {
+        const msg = String((e && e.errMsg) || '');
+        // 用户取消不算错误（errMsg 含 cancel）；隐私未声明才会被系统拦下
+        if (/privacy|not authorized|deny/i.test(msg)) {
+          wx.showModal({
+            title: '还不能选图',
+            content:
+              '小程序后台的《用户隐私保护指引》里需要声明「选中的照片或视频信息」，否则系统会直接拒绝打开相册。',
+            showCancel: false,
+            confirmText: '知道了',
+            confirmColor: '#C2603F',
+          });
+        }
+      }
+    },
+
+    onPreviewPhoto(e) {
+      const index = Number(e.currentTarget.dataset.index) || 0;
+      const urls = this.data.photos.filter(Boolean);
+      if (!urls.length) return;
+      wx.previewImage({ urls, current: urls[index] || urls[0] });
+    },
+
+    onRemovePhoto(e) {
+      const index = Number(e.currentTarget.dataset.index);
+      const photos = this.data.photos.slice();
+      const dropped = photos.splice(index, 1)[0];
+      const removed = dropped && !media.isTemp(dropped)
+        ? this.data.removedPhotos.concat([dropped])
+        : this.data.removedPhotos;
+      this.setData({ photos, removedPhotos: removed, localPhotos: media.countLocal(photos) });
+    },
+
+    async onSave() {
       const { form } = this.data;
       if (form.status === 'treasured' && !form.doneDate) {
         wx.showToast({ title: '选个完成的日期吧', icon: 'none' });
         return;
       }
-      this.triggerEvent('save', form);
+      if (this.data.saving) return;
+
+      const photos = this.data.photos.filter(Boolean);
+      const needUpload = photos.filter(p => !media.isCloud(p));
+
+      if (needUpload.length) {
+        this.setData({ saving: true });
+        wx.showLoading({ title: '保存照片…', mask: true });
+        const persisted = await media.persistMany(photos, (i, n) =>
+          wx.showLoading({ title: `保存照片 ${i}/${n}`, mask: true })
+        );
+        wx.hideLoading();
+        this.setData({ saving: false });
+        media.remove(this.data.removedPhotos);
+        this.triggerEvent('save', Object.assign({}, form, { photos: persisted }));
+        return;
+      }
+
+      media.remove(this.data.removedPhotos);
+      this.triggerEvent('save', Object.assign({}, form, { photos }));
     },
   },
 });

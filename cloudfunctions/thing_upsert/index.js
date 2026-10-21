@@ -40,7 +40,11 @@ function pick(item, scope, openid) {
     doneDate: item.doneDate || '',
     mood: item.mood || '',
     note: String(item.note || '').slice(0, 140),
-    photos: Array.isArray(item.photos) ? item.photos.slice(0, 9) : [],
+    // 只收云文件ID：本机路径（wxfile:// 或 USER_DATA_PATH）推上去对方是看不到的，
+    // 客户端会在 flush 时补传后重推，这里先丢掉比存一个坏路径好
+    photos: (Array.isArray(item.photos) ? item.photos : [])
+      .filter(p => typeof p === 'string' && p.indexOf('cloud://') === 0)
+      .slice(0, 9),
     createdBy: item.createdBy || openid,
     updatedBy: openid,
     isDefault: !!item.isDefault,

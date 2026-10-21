@@ -41,15 +41,26 @@ Page({
 
     const timeline = recentTreasured(all, 10).map(t => {
       const meta = t.mood ? MOOD_MAP[t.mood] : null;
+      const photos = Array.isArray(t.photos) ? t.photos.filter(Boolean) : [];
       return {
         _id: t._id,
         title: t.title,
         dateText: formatDate(t.doneDate),
         note: t.note || '',
         glyph: meta ? meta.glyph : '',
+        photos,
+        cover: photos[0] || '',
+        photoCount: photos.length,
       };
     });
 
     this.setData({ progress, levels, counts, moods, timeline, loaded: true });
+  },
+
+  onPreview(e) {
+    const id = e.currentTarget.dataset.id;
+    const item = this.data.timeline.find(t => t._id === id);
+    if (!item || !item.photos.length) return;
+    wx.previewImage({ urls: item.photos, current: item.photos[0] });
   },
 });

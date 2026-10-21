@@ -256,3 +256,30 @@
   margin-top: 6rpx;
   line-height: 1.6;
 }
+
+.tl-photos {
+  position: relative;
+  display: inline-block;
+  margin-top: 14rpx;
+}
+
+.tl-cover {
+  display: block;
+  width: 148rpx;
+  height: 148rpx;
+  border-radius: 10rpx;
+  background: var(--paper-3);
+}
+
+.tl-photo-more {
+  position: absolute;
+  right: 8rpx;
+  bottom: 8rpx;
+  padding: 0 10rpx;
+  height: 30rpx;
+  border-radius: 15rpx;
+  background: rgba(61, 54, 48, 0.55);
+  color: #FFF9F4;
+  font-size: 20rpx;
+  line-height: 30rpx;
+}
