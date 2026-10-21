@@ -1,0 +1,16 @@
+# 依赖
+node_modules/
+cloudfunctions/**/node_modules/
+
+# 微信开发者工具个人配置（含本机路径、编译模式，不入库）
+project.private.config.json
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+
+# 构建产物
+miniprogram/miniprogram_npm/
