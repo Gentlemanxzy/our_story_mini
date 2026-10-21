@@ -61,4 +61,20 @@ const { groupByCategory, calcProgress } = require('../miniprogram/utils/format')
 
   const delAgain = await cat.remove(c1.item.key);
   log('16 重复删除:', delAgain.ok, delAgain.reason);
+
+  // ── 个人资料 ──
+  const user = require('../miniprogram/services/user');
+  const auth = require('../miniprogram/utils/auth');
+
+  const st = await auth.ensureLogin();
+  log('17 登录态(无云):', st.cloudOk, st.reason);
+
+  const saved = await user.saveProfile({ nickName: '宇少', avatar: '' });
+  log('18 保存昵称:', saved.nickName);
+
+  const back = await user.getProfile();
+  log('19 读回昵称:', back.nickName);
+
+  const av = await user.persistAvatar('/tmp/fake.png');
+  log('20 无云无文件系统时头像降级:', av.where);
 })();

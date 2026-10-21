@@ -14,16 +14,18 @@
 - 我们的章节：百分比等级、分布统计、心情 Top3、珍藏时间线
 - 管理小事：自定义新建、删除、从 105 条默认库挑选加入
 - **自定义分类**：新建、改名、删除；记录面板里也能直接改归属或现建一个
+- **头像与昵称**：走微信「头像昵称填写能力」，可随时改；头像优先存云存储，未连云端时存本机
+- **登录态**：云函数取 openid 并缓存，未连云端时静默降级为本地模式
 - 情侣绑定：邀请码输入 / 扫码 / 复制（交互就绪）
 
 **待接入云端**：
 
-- 云函数：`login` 已就位；其余 10 个待补（`couple_create` / `couple_join` / `couple_unbind` / `thing_upsert` / `thing_delete` / `thing_seed` / `thing_reorder` / `category_upsert` / `category_delete` / `code_gc`）
+- 云函数：`login`、`user_update` 已就位；其余 10 个待补（`couple_create` / `couple_join` / `couple_unbind` / `thing_upsert` / `thing_delete` / `thing_seed` / `thing_reorder` / `category_upsert` / `category_delete` / `code_gc`）
 - 数据库集合与安全规则
 - 图片上传（`chooseMedia` + 云存储）
 - 实时同步（全局 watcher）
 
-数据访问层集中在 `miniprogram/services/` 下的 `things.js` 与 `categories.js`，接口是 Promise 形态，换成云端调用时**只需改这两个文件**，页面不用动。
+数据访问层集中在 `miniprogram/services/` 下的 `things.js`、`categories.js`、`user.js`，接口都是 Promise 形态，换成云端调用时**只改这几个文件**，页面不用动。
 
 ---
 
@@ -38,6 +40,8 @@ ourStory/
 │   ├── data/default-things.js          # 105 条默认小事库（本地常量，不入库）
 │   ├── services/things.js              # 清单数据访问层（当前本地实现）
 │   ├── services/categories.js          # 分类数据访问层（内置 + 自定义）
+│   ├── services/user.js                # 昵称头像读写与头像落盘
+│   ├── utils/auth.js                   # 登录态（openid 缓存 + 云端不可用时降级）
 │   ├── utils/format.js                 # 日期、分组、进度计算
 │   ├── components/record-sheet/        # 半屏记录面板
 │   ├── components/category-picker/     # 分类选择器（含新建）
@@ -47,12 +51,44 @@ ourStory/
 │       ├── chapters/                   # 我们的章节（tab）
 │       ├── mine/                       # 我的（tab）
 │       ├── bind/                       # 情侣绑定
-│       └── things-manage/              # 管理小事 + 管理分类
+│       ├── things-manage/              # 管理小事 + 管理分类
+│       └── profile-edit/               # 编辑头像昵称
 ├── cloudfunctions/login/               # 取 openid、upsert users
+├── cloudfunctions/user_update/         # 保存昵称与头像
 ├── tools/gen-tabbar-icons.py           # tabBar 图标生成脚本
 ├── tools/smoke-test.js                 # 本地逻辑冒烟测试（node 直接跑）
 └── docs/security-rules.md              # 数据库安全规则
 ```
+
+---
+
+## 登录与头像昵称
+
+**登录不需要用户授权**。小程序端拿 openid 有两条路，本项目走后者：
+
+- `wx.login` 取 code → 服务端换 openid（多一层网络与出错点）
+- 云函数里 `cloud.getWXContext().OPENID`（直接就有）
+
+所以「登录」对用户是无感的：`utils/auth.js` 在进入「我的」时调一次 `login` 云函数，把 openid 存本地，失败就静默降级为本地模式，不弹窗不阻塞。
+
+**头像昵称必须用户主动确认**。`wx.getUserProfile` 自 **2022-10-25 已被回收**（只会返回「微信用户」+ 灰头像），现在的合规做法是「头像昵称填写能力」：
+
+```html
+<button open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+  <image src="{{avatar}}" />
+</button>
+<input type="nickname" bindinput="onNickInput" />
+```
+
+用户点头像时，微信面板里能直接选「用微信头像」；昵称输入框的键盘上方会出现「使用微信昵称」。体验接近一键，但必须用户点一下确认。
+
+**头像存储三级降级**（`services/user.js`）：
+
+1. `wx.cloud.uploadFile` → `cloud://` fileID（长期有效，换手机也在）
+2. 云不可用 → `FileSystemManager.saveFile` 存到 `USER_DATA_PATH`（本机长期有效，重装丢失）
+3. 都失败 → 临时路径（仅本次会话）
+
+`chooseAvatar` 返回的是**临时路径，约 24 小时失效**，所以必须走上面这套落盘，不能直接存进数据库。
 
 ---
 
@@ -105,14 +141,15 @@ node tools/smoke-test.js
 1. **确认环境 ID**：`miniprogram/config.js` 里的 `ENV_ID` 必须与你云开发控制台一致
 2. **建集合**：`users` / `couples` / `things` / `categories`（`default_things` 不需要，已本地化）
 3. **配安全规则**：见 `docs/security-rules.md`，四个集合逐个粘贴
-4. **部署云函数**：`cloudfunctions/` 下每个目录右键「上传并部署：云端安装依赖」
-5. **配隐私指引**（不配会直接调不动相册）：
+4. **云存储**：权限用默认的「所有用户可读、仅创建者可写」即可，头像走 `avatar/` 目录
+5. **部署云函数**：`cloudfunctions/` 下每个目录右键「上传并部署：云端安装依赖」（先部署 `login`，不然「我的」页会显示本地模式）
+6. **配隐私指引**（不配会直接调不动相册和头像）：
    后台「设置 → 服务内容声明 → 用户隐私保护指引」，声明
    - 选中的照片或视频信息
    - 摄像头
    - 头像、昵称
    - 剪切板（复制邀请码用到）
-6. **最低基础库**：后台「设置 → 基本设置」设为 **2.21.2**（`chooseAvatar` 的门槛）
+7. **最低基础库**：后台「设置 → 基本设置」设为 **2.21.2**（`chooseAvatar` 的门槛）
 
 ---
 

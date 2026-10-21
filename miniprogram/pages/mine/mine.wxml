@@ -1,12 +1,16 @@
 <view class="page">
-  <!-- 身份卡 -->
-  <view class="card identity">
-    <view class="avatar serif">{{bound ? '俩' : '我'}}</view>
+  <!-- 身份卡：点击进编辑资料 -->
+  <view class="card identity" bindtap="goProfile">
+    <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill" />
+    <view wx:else class="avatar serif">{{initial}}</view>
+
     <view class="identity-body">
       <text class="nick serif">{{nickName || '还没起名字'}}</text>
-      <text class="t-hint">{{bound ? '已和对方绑定' : '单人模式'}}</text>
+      <text class="t-hint">{{statusText}}</text>
     </view>
-    <view wx:if="{{!bound}}" class="mini-btn" bindtap="goBind">去绑定</view>
+
+    <view wx:if="{{!nickName}}" class="mini-btn">填资料</view>
+    <text wx:else class="row-arrow">›</text>
   </view>
 
   <view class="counts">
@@ -23,9 +27,14 @@
 
   <!-- 菜单 -->
   <view class="card menu">
+    <view class="row" bindtap="goProfile">
+      <text class="row-label">头像与昵称</text>
+      <text class="row-sub t-hint">随时可以改</text>
+      <text class="row-arrow">›</text>
+    </view>
     <view class="row" bindtap="goManage">
       <text class="row-label">管理小事</text>
-      <text class="row-sub t-hint">增删 · 自定义 · 排序</text>
+      <text class="row-sub t-hint">增删 · 分类 · 排序</text>
       <text class="row-arrow">›</text>
     </view>
     <view class="row" bindtap="goBind">
@@ -35,7 +44,7 @@
     </view>
     <view class="row" bindtap="onReset">
       <text class="row-label">重新体验首次引导</text>
-      <text class="row-sub t-hint">清空本机数据</text>
+      <text class="row-sub t-hint">清空清单数据</text>
       <text class="row-arrow">›</text>
     </view>
     <view class="row" bindtap="onAbout">
@@ -45,6 +54,6 @@
   </view>
 
   <view class="foot">
-    <text class="t-hint">当前为本地演示数据 · 云端接入后自动同步</text>
+    <text class="t-hint">{{footText}}</text>
   </view>
 </view>

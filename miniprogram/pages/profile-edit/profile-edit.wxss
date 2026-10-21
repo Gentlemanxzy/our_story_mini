@@ -1,0 +1,104 @@
+.page {
+  padding-top: 48rpx;
+}
+
+/* ── 头像 ── */
+.avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 40rpx;
+}
+
+.avatar-btn {
+  position: relative;
+  width: 176rpx;
+  height: 176rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--accent-soft);
+  padding: 0;
+  line-height: normal;
+}
+
+.avatar-img {
+  width: 176rpx;
+  height: 176rpx;
+  display: block;
+}
+
+.avatar-ph {
+  width: 176rpx;
+  height: 176rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  color: var(--accent);
+}
+
+.avatar-mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44rpx;
+  background: rgba(61, 54, 48, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-mask-text {
+  font-size: 22rpx;
+  color: #FFF9F4;
+  letter-spacing: 0.08em;
+}
+
+.avatar-tip {
+  margin-top: 20rpx;
+  text-align: center;
+}
+
+/* ── 昵称 ── */
+.field {
+  padding: 28rpx;
+  background: #FFFFFF;
+}
+
+.label {
+  display: block;
+  font-size: 24rpx;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  margin-bottom: 14rpx;
+}
+
+.input {
+  height: 92rpx;
+  padding: 0 24rpx;
+  border-radius: 16rpx;
+  border: 1rpx solid var(--line);
+  background: var(--paper-2);
+  font-size: 30rpx;
+  color: var(--ink);
+}
+
+.ph {
+  color: var(--ink-3);
+  font-size: 26rpx;
+}
+
+/* ── 说明 ── */
+.note {
+  padding: 32rpx 8rpx 0;
+}
+
+.note .t-hint {
+  display: block;
+  line-height: 1.9;
+}
+
+.save {
+  margin-top: 56rpx;
+}

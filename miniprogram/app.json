@@ -4,7 +4,8 @@
     "pages/chapters/chapters",
     "pages/mine/mine",
     "pages/bind/bind",
-    "pages/things-manage/things-manage"
+    "pages/things-manage/things-manage",
+    "pages/profile-edit/profile-edit"
   ],
   "window": {
     "backgroundColor": "#FDFBF7",
