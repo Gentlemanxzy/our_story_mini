@@ -1,13 +1,18 @@
 <view class="page">
   <view class="avatar-wrap">
+    <!-- button 只负责点击与 open-type，不再承担圆角裁剪 -->
     <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-      <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill" />
-      <view wx:else class="avatar-ph serif">头像</view>
-      <view class="avatar-mask">
-        <text class="avatar-mask-text">更换</text>
+      <view class="avatar-circle {{avatar ? '' : 'is-empty'}}">
+        <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill" />
+        <block wx:else>
+          <text class="avatar-plus">＋</text>
+          <text class="avatar-ph">头像</text>
+        </block>
       </view>
+      <text class="avatar-link">点头像可更换</text>
     </button>
-    <text class="t-hint avatar-tip">点一下可从微信头像里选，也可以从相册挑</text>
+
+    <text class="t-hint avatar-tip">可从微信头像里选，也可以从相册挑</text>
   </view>
 
   <view class="card field">

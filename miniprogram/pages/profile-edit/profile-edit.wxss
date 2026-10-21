@@ -10,53 +10,74 @@
   padding-bottom: 40rpx;
 }
 
+/*
+ * button 只作为点击区域 + open-type 载体：
+ * 不设圆角与 overflow，避免把内部遮罩裁成「被啃掉两侧」的形状，
+ * 也避免依赖 button 的 overflow 去裁剪 image（部分基础库不可靠）。
+ */
 .avatar-btn {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+  line-height: normal;
+}
+
+.avatar-circle {
   width: 176rpx;
   height: 176rpx;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--accent-soft);
-  padding: 0;
-  line-height: normal;
+  /* border-box + 100% 的 image，避免图片溢出 2rpx 边框 */
+  box-sizing: border-box;
+  border: 1rpx solid var(--line);
+  background: var(--paper-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-circle.is-empty {
+  border-style: dashed;
+  border-color: #DCD2C3;
 }
 
 .avatar-img {
-  width: 176rpx;
-  height: 176rpx;
+  width: 100%;
+  height: 100%;
   display: block;
+  flex-shrink: 0;
+}
+
+.avatar-plus {
+  font-size: 40rpx;
+  line-height: 1;
+  color: var(--ink-3);
 }
 
 .avatar-ph {
-  width: 176rpx;
-  height: 176rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34rpx;
-  color: var(--accent);
-}
-
-.avatar-mask {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 44rpx;
-  background: rgba(61, 54, 48, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.avatar-mask-text {
   font-size: 22rpx;
-  color: #FFF9F4;
-  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  margin-top: 8rpx;
+}
+
+.avatar-link {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  color: var(--accent);
+  letter-spacing: 0.04em;
 }
 
 .avatar-tip {
-  margin-top: 20rpx;
+  margin-top: 14rpx;
   text-align: center;
 }
 
