@@ -1,4 +1,9 @@
 const { ENV_ID } = require('./config');
+const thingsSvc = require('./services/things');
+const categoriesSvc = require('./services/categories');
+
+/** 前后台切换时触发同步的最小间隔 */
+const SYNC_GAP = 30000;
 
 App({
   globalData: {
@@ -6,7 +11,6 @@ App({
     userInfo: null,
     coupleId: '',
     members: [],
-    // 云端接入前先用本地数据跑通界面
     cloudReady: false,
   },
 
@@ -20,5 +24,22 @@ App({
       traceUser: true,
     });
     this.globalData.cloudReady = true;
+  },
+
+  /**
+   * 回到前台时补一次同步：先拉云端，再把本地待传队列推上去。
+   * 全部失败也不影响使用——本地缓存是完整的。
+   */
+  onShow() {
+    const now = Date.now();
+    if (now - (this._lastSync || 0) < SYNC_GAP) return;
+    this._lastSync = now;
+
+    thingsSvc
+      .pull()
+      .then(() => thingsSvc.flush())
+      .then(() => categoriesSvc.pull())
+      .then(() => categoriesSvc.flush())
+      .catch(() => {});
   },
 });

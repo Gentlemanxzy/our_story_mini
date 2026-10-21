@@ -1,0 +1,9 @@
+{
+  "name": "thing_delete",
+  "version": "1.0.0",
+  "description": "软删清单条目（保留墓碑）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

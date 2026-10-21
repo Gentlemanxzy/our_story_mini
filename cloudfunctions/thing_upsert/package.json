@@ -1,0 +1,9 @@
+{
+  "name": "thing_upsert",
+  "version": "1.0.0",
+  "description": "写入或更新清单条目（单条/批量）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

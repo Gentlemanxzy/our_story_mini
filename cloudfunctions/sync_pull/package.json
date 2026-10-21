@@ -1,0 +1,9 @@
+{
+  "name": "sync_pull",
+  "version": "1.0.0",
+  "description": "拉取当前作用域的清单与分类",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

@@ -8,7 +8,7 @@
 
 ## 当前状态
 
-**已可用（本地数据）**：打开即可完整体验，数据存在本机 Storage。
+**已可用**：打开即可完整体验；**本地为主、云端自动同步，云端不可用时静默走本地**。
 
 - 打卡墙：按分类分组、搜索、状态筛选、记录面板（分类 / 状态 / 完成日期 / 心情 / 一句话）
 - 我们的章节：百分比等级、分布统计、心情 Top3、珍藏时间线
@@ -16,16 +16,18 @@
 - **自定义分类**：新建、改名、删除；记录面板里也能直接改归属或现建一个
 - **头像与昵称**：走微信「头像昵称填写能力」，可随时改；头像优先存云存储，未连云端时存本机
 - **登录态**：云函数取 openid 并缓存，未连云端时静默降级为本地模式
+- **数据同步**：清单与分类本地先写、后台推云，失败入队待补传；「我的」页可看待同步条数并手动同步
 - 情侣绑定：邀请码输入 / 扫码 / 复制（交互就绪）
 
-**待接入云端**：
+**待补齐**：
 
-- 云函数：`login`、`user_update` 已就位；其余 10 个待补（`couple_create` / `couple_join` / `couple_unbind` / `thing_upsert` / `thing_delete` / `thing_seed` / `thing_reorder` / `category_upsert` / `category_delete` / `code_gc`）
-- 数据库集合与安全规则
-- 图片上传（`chooseMedia` + 云存储）
-- 实时同步（全局 watcher）
+- 云函数：7 个已就位（见下）；还差 5 个（`couple_create` / `couple_join` / `couple_unbind` / `thing_reorder` / `code_gc`）
+- 4 个数据库集合与安全规则（`docs/security-rules.md`）
+- 记录里的照片上传（`chooseMedia` + 云存储）
+- 实时同步（`db.watch()`，依赖绑定关系先做完）
+- 排序功能（`thing_reorder`）
 
-数据访问层集中在 `miniprogram/services/` 下的 `things.js`、`categories.js`、`user.js`，接口都是 Promise 形态，换成云端调用时**只改这几个文件**，页面不用动。
+数据访问层集中在 `miniprogram/services/` 下的 `things.js`、`categories.js`、`user.js`，接口都是 Promise 形态。
 
 ---
 
@@ -38,10 +40,11 @@ ourStory/
 │   ├── config.js                       # 云环境 ID、业务常量
 │   ├── constants.js                    # 分类/状态/心情/等级枚举
 │   ├── data/default-things.js          # 105 条默认小事库（本地常量，不入库）
-│   ├── services/things.js              # 清单数据访问层（当前本地实现）
-│   ├── services/categories.js          # 分类数据访问层（内置 + 自定义）
+│   ├── services/things.js              # 清单：本地优先 + 云端推送 + 兜底
+│   ├── services/categories.js          # 分类：同一套同步策略
 │   ├── services/user.js                # 昵称头像读写与头像落盘
 │   ├── utils/auth.js                   # 登录态（openid 缓存 + 云端不可用时降级）
+│   ├── utils/cloud.js                  # 云调用封装（超时 / 连续失败短路）
 │   ├── utils/format.js                 # 日期、分组、进度计算
 │   ├── components/record-sheet/        # 半屏记录面板
 │   ├── components/category-picker/     # 分类选择器（含新建）
@@ -53,8 +56,14 @@ ourStory/
 │       ├── bind/                       # 情侣绑定
 │       ├── things-manage/              # 管理小事 + 管理分类
 │       └── profile-edit/               # 编辑头像昵称
-├── cloudfunctions/login/               # 取 openid、upsert users
-├── cloudfunctions/user_update/         # 保存昵称与头像
+├── cloudfunctions/
+│   ├── login/                          # 取 openid、upsert users
+│   ├── user_update/                    # 保存昵称与头像
+│   ├── thing_upsert/                   # 写入/更新清单（单条或批量）
+│   ├── thing_delete/                   # 软删清单条目
+│   ├── category_upsert/                # 写入/更新自定义分类
+│   ├── category_delete/                # 软删分类
+│   └── sync_pull/                      # 一次拉齐清单与分类
 ├── tools/gen-tabbar-icons.py           # tabBar 图标生成脚本
 ├── tools/smoke-test.js                 # 本地逻辑冒烟测试（node 直接跑）
 └── docs/security-rules.md              # 数据库安全规则
@@ -117,7 +126,32 @@ ourStory/
 - 名称查重会 trim 首尾空格，且与内置分类一起查
 - 上限 30 个自定义分类
 
-跑一遍逻辑自检（不需要开发者工具）：
+---
+
+## 数据同步与离线兜底
+
+**原则：本地是完整副本，云端是同步通道。云端挂了不丢数据，也不卡界面。**
+
+| 环节 | 做法 |
+|---|---|
+| 读 | 只读本地 `Storage`，界面立刻出图，不等网络 |
+| 写 | 先写本地 → 写入待传队列 → 后台推云；推成功才出队 |
+| 云端失败 | 队列保留，下次 `flush()` 补传；界面完全不受影响 |
+| 换手机 / 恢复 | `pull()` 拉云端全量，按 `updatedAt` 较新者合并进本地 |
+| 删除 | 软删（`deleted: true`）保留墓碑，否则 `pull` 时会被云端复活 |
+
+**触发时机**：App 回到前台（`onShow`，30 秒节流）、「我的」页进入、以及「我的 → 同步到云端」手动触发。顺序固定为 `pull → flush`：先拿云端最新，再推本地未上传的。
+
+**队列设计**：以 `kind:_id` 为键去重，所以「先改后删」只会留最后一次操作；批量条目（如首次灌入的 105 条）合并成一次请求，不逐条发。
+
+**两条默认假设**（写在这里，避免以后误判）：
+
+1. **冲突用 `updatedAt` 字符串比较，取较新者**。时钟以客户端为准，极端情况下（两台设备系统时间差很大）可能判错；两人场景下影响可控。
+2. **`sync_pull` 单次上限 1000 条**。105 条默认清单远低于此；若将来单方清单超过 1000 条，需要改成游标分页。
+
+**编号 `no` 是派生字段**：读的时候按 `order` 重新编号，不入库、不同步，所以增删后编号永远连续，不会出现「删了第 3 条留下空号」。
+
+跑一遍逻辑自检（不需要开发者工具，含云端失败/恢复两种路径）：
 
 ```bash
 node tools/smoke-test.js
@@ -140,9 +174,9 @@ node tools/smoke-test.js
 
 1. **确认环境 ID**：`miniprogram/config.js` 里的 `ENV_ID` 必须与你云开发控制台一致
 2. **建集合**：`users` / `couples` / `things` / `categories`（`default_things` 不需要，已本地化）
-3. **配安全规则**：见 `docs/security-rules.md`，四个集合逐个粘贴
+3. **配安全规则**：见 `docs/security-rules.md`，四个集合都设为 `read: false / write: false`（全部走云函数）
 4. **云存储**：权限用默认的「所有用户可读、仅创建者可写」即可，头像走 `avatar/` 目录
-5. **部署云函数**：`cloudfunctions/` 下每个目录右键「上传并部署：云端安装依赖」（先部署 `login`，不然「我的」页会显示本地模式）
+5. **部署云函数**：`cloudfunctions/` 下 7 个目录逐个右键「上传并部署：云端安装依赖」。先部署 `login`，否则「我的」页会一直显示本地模式
 6. **配隐私指引**（不配会直接调不动相册和头像）：
    后台「设置 → 服务内容声明 → 用户隐私保护指引」，声明
    - 选中的照片或视频信息
@@ -175,5 +209,5 @@ node tools/smoke-test.js
 
 ## 包体积
 
-主包当前 **约 109KB**（图片仅 6 个 tabBar 图标，合计约 12KB）。
+主包当前 **约 121KB**（图片仅 6 个 tabBar 图标，合计约 12KB）。
 主包上限 2MB，后续加页面和图仍有充足余量。新增图片前先压缩到合适尺寸。

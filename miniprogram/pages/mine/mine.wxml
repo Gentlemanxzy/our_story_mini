@@ -42,6 +42,11 @@
       <text class="row-sub t-hint">{{bound ? '查看对方' : '邀请码互绑'}}</text>
       <text class="row-arrow">›</text>
     </view>
+    <view class="row" bindtap="onSyncTap">
+      <text class="row-label">同步到云端</text>
+      <text class="row-sub t-hint">{{pending > 0 ? pending + ' 条待上传' : '已同步'}}</text>
+      <text class="row-arrow">›</text>
+    </view>
     <view class="row" bindtap="onReset">
       <text class="row-label">重新体验首次引导</text>
       <text class="row-sub t-hint">清空清单数据</text>
